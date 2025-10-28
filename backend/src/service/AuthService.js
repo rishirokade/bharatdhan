@@ -55,6 +55,10 @@ class AuthService {
             user,
         };
     }
+
+    static async getProfile(req) {
+        return req.user;
+    }
 }
 
 module.exports = AuthService;

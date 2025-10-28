@@ -1,9 +1,13 @@
 const express = require("express");
+var cookieParser = require("cookie-parser");
 const errorHandling = require("./middleware/ErrorHandling");
 const AppError = require("./utils/AppError");
 const { connectDB } = require("./config/db.config");
+
 const app = express();
+
 app.use(express.json({}));
+app.use(cookieParser());
 
 connectDB();
 

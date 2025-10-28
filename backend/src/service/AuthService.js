@@ -1,8 +1,34 @@
 const { UserModel } = require("../models/User.model");
+const bcryptjs = require("bcryptjs");
 const AppError = require("../utils/AppError");
+const JwtService = require("../utils/JwtService");
 
 class AuthService {
-    static async loginUser(credentials) {
+    static async loginUser(req, resp) {
+        const { email, password } = req.body;
+
+        const isUserExist = await UserModel.findOne({
+            email: email.toLowerCase(),
+        });
+
+        if (!isUserExist) throw new AppError(400, "user not found");
+
+        const isPasswordValid = await bcryptjs.compare(
+            password,
+            isUserExist.password
+        );
+
+        if (!isPasswordValid) throw new AppError(400, "user not found");
+
+        const jwtToken = JwtService.generateToken({
+            id: isUserExist._id,
+            email: isUserExist.email,
+        });
+
+        resp.cookie("token", jwtToken, {
+            httpOnly: true,
+        });
+
         return { message: "User logged in successfully" };
     }
 

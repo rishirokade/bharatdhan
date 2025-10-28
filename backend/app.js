@@ -3,6 +3,9 @@ const errorHandling = require("./src/middleware/ErrorHandling");
 const AppError = require("./src/utils/AppError");
 const app = express();
 
+// Connected router to app
+app.use("/api/v1", require("./src/router"));
+
 app.get("/", (req, res) => {
     res.send("Hello World!");
 });
